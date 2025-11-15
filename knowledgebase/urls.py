@@ -6,6 +6,6 @@ from documents import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/upload/', views.upload_document, name='upload'),
-    path('api/search/', views.search_documents, name='search'),
+    path('upload/', views.upload_documents, name='upload'),
+    path('search/', views.search_documents, name='search'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
