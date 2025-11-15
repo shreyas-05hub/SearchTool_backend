@@ -3,3 +3,4 @@ djangorestframework
 PyPDF2
 python-docx
 whoosh
+django-cors-headers

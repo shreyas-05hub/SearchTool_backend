@@ -3,10 +3,17 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'dev-secret-key'
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+# ---------------------------
+# SECURITY CONFIG
+# ---------------------------
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
+ALLOWED_HOSTS = ["*", "localhost", "127.0.0.1"]
+
+# ---------------------------
+# INSTALLED APPS
+# ---------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -14,16 +21,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third-party
     'rest_framework',
-    'documents',
     'corsheaders',
+
+    # Local apps
+    'documents',
 ]
 
+# ---------------------------
+# MIDDLEWARE
+# ---------------------------
 MIDDLEWARE = [
-    # Must be at the very top
+    # CORS must be FIRST
     'corsheaders.middleware.CorsMiddleware',
 
-    # Django default middleware
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -33,8 +46,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# ---------------------------
+# URL / WSGI
+# ---------------------------
 ROOT_URLCONF = 'knowledgebase.urls'
+WSGI_APPLICATION = 'knowledgebase.wsgi.application'
 
+# ---------------------------
+# TEMPLATES
+# ---------------------------
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -51,13 +71,15 @@ TEMPLATES = [
     },
 ]
 
+# ---------------------------
+# CORS CONFIG
+# ---------------------------
 CORS_ALLOW_ALL_ORIGINS = True
-
 CORS_ALLOW_HEADERS = ["*"]
 
-
-WSGI_APPLICATION = 'knowledgebase.wsgi.application'
-
+# ---------------------------
+# DATABASE (SQLite)
+# ---------------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -65,13 +87,27 @@ DATABASES = {
     }
 }
 
+# ---------------------------
+# PASSWORD VALIDATION
+# ---------------------------
 AUTH_PASSWORD_VALIDATORS = []
 
+# ---------------------------
+# INTERNATIONALIZATION
+# ---------------------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# ---------------------------
+# STATIC + MEDIA
+# ---------------------------
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')   # needed for Render
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Ensure media folder exists
+os.makedirs(MEDIA_ROOT, exist_ok=True)
